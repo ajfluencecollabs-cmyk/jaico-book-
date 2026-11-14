@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#07060b">
+    <title>Handwriting & Book Writing Work · Official Telegram</title>
+
+    <style>
+        :root {
+            --bg-base: #07060b;
+            --gold-light: #fef3c7;
+            --gold-mid: #f59e0b;
+            --gold-dark: #b45309;
+            --gold-glow: rgba(245, 158, 11, 0.35);
+            --ink: #0f0a05;
+            --text-light: #fafaf9;
+            --text-muted: #a8a29e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            min-height: 100vh;
+            background: var(--bg-base);
+            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 50% 28%, rgba(245, 158, 11, 0.16) 0%, rgba(120, 53, 15, 0.12) 45%, transparent 75%),
+                radial-gradient(circle at 50% 92%, #000 0%, transparent 100%);
+            z-index: 1;
+        }
+
+        .page-card {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 410px;
+            background: linear-gradient(160deg, rgba(26, 22, 32, 0.94) 0%, rgba(11, 9, 15, 0.98) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.28);
+            border-radius: 34px;
+            padding: 36px 24px 28px;
+            text-align: center;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(245, 158, 11, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            margin: 20px 0;
+        }
+
+        /* Luxury Emblem Avatar */
+        .emblem-wrap {
+            position: relative;
+            width: 112px;
+            height: 112px;
+            margin: 0 auto 20px auto;
+        }
+
+        .emblem-ring {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-mid) 45%, var(--gold-dark) 90%);
+            padding: 3px;
+            box-shadow: 0 0 30px var(--gold-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emblem-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #231d2b, #0d0a12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emblem-inner svg {
+            width: 52px;
+            height: 52px;
+            fill: var(--gold-mid);
+            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.5));
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            width: 28px;
+            height: 28px;
+            background: #229ed9;
+            border-radius: 50%;
+            border: 3px solid #14111a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(34, 158, 217, 0.75);
+            z-index: 4;
+        }
+        .verified-badge svg { width: 14px; height: 14px; fill: #fff; }
+
+        .hiring-pill {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.14);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: var(--gold-light);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 5px 14px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+        }
+
+        .channel-name {
+            font-size: 27px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0 6px 0;
+            background: linear-gradient(180deg, #ffffff 30%, var(--gold-light) 70%, var(--gold-mid) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.15;
+        }
+
+        .sub-tagline {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
+        /* Job Details & Perks Stack */
+        .features-box {
+            background: rgba(15, 12, 20, 0.75);
+            border: 1px solid rgba(245, 158, 11, 0.18);
+            border-left: 4px solid var(--gold-mid);
+            border-radius: 18px;
+            padding: 18px 16px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #f5f5f4;
+            margin-bottom: 12px;
+            line-height: 1.35;
+        }
+        .feature-item:last-child { margin-bottom: 0; }
+
+        .feature-icon {
+            color: var(--gold-mid);
+            font-size: 15px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .feature-item b {
+            color: var(--gold-light);
+            font-weight: 800;
+        }
+
+        /* High-Contrast CTA Button */
+        .cta-wrap {
+            position: relative;
+            width: 100%;
+        }
+
+        .cta-btn {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 12px !important;
+            width: 100% !important;
+            padding: 18px 12px !important;
+            border-radius: 50px !important;
+            border: none !important;
+            cursor: pointer;
+            text-decoration: none !important;
+            background: linear-gradient(180deg, #ffffff 0%, #fef3c7 25%, #f59e0b 75%, #b45309 100%) !important;
+            box-shadow: 0 12px 30px rgba(245, 158, 11, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.9) !important;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s ease;
+        }
+
+        .cta-btn:active {
+            transform: scale(0.97);
+        }
+
+        .cta-btn-text {
+            color: #0f0a05 !important;
+            font-size: 19px !important;
+            font-weight: 950 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.8px !important;
+            display: inline-block !important;
+            line-height: 1 !important;
+            white-space: nowrap !important;
+        }
+
+        .cta-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+            transform: skewX(-20deg);
+            animation: sheen 3.5s infinite ease-in-out;
+        }
+
+        @keyframes sheen {
+            0% { left: -100%; }
+            18% { left: 120%; }
+            100% { left: 120%; }
+        }
+
+        .tg-round-ic {
+            width: 32px;
+            height: 32px;
+            background: #229ed9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+        .tg-round-ic svg {
+            width: 16px;
+            height: 16px;
+            fill: #ffffff;
+            margin-right: 1px;
+        }
+
+        .note-text {
+            margin-top: 15px;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            letter-spacing: 0.4px;
+        }
+
+        /* Fallback Modal for In-App Browsers */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            z-index: 9999;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-body {
+            background: #17131e;
+            width: 100%;
+            max-width: 440px;
+            border-top-left-radius: 26px;
+            border-top-right-radius: 26px;
+            border-top: 1px solid rgba(245, 158, 11, 0.35);
+            padding: 24px 20px;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 17px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+
+        .modal-desc {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+        }
+
+        .modal-action {
+            display: block;
+            width: 100%;
+            padding: 15px 0;
+            border-radius: 14px;
+            font-size: 14.5px;
+            font-weight: 800;
+            text-decoration: none;
+            margin-bottom: 9px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-open-app {
+            background: linear-gradient(180deg, var(--gold-light), var(--gold-mid));
+            color: #0f0a05;
+        }
+
+        .btn-copy-link {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+
+    <div class="page-card">
+        <div class="emblem-wrap">
+            <div class="emblem-ring">
+                <div class="emblem-inner">
+                    <!-- Fountain Pen Nib & Book Icon -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="verified-badge">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+        </div>
+
+        <div class="hiring-pill">Work From Home · Now Hiring</div>
+        <h1 class="channel-name">BOOK WRITING WORK</h1>
+        <div class="sub-tagline">Neat & Clean Handwriting Required · Weekly Payouts</div>
+
+        <div class="features-box">
+            <div class="feature-item">
+                <span class="feature-icon">✍️</span>
+                <div><b>Good Handwriting Needed:</b> Copy notes & book manuscripts neatly on paper</div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🏠</span>
+                <div><b>100% Work From Home:</b> Flexible daily hours using just pen & notebook</div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">💰</span>
+                <div><b>Per-Page Payment:</b> Direct bank/UPI transfer upon project completion</div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📦</span>
+                <div><b>Free Material Support:</b> Full guidelines & sample pages shared inside</div>
+            </div>
+        </div>
+
+        <div class="cta-wrap">
+            <button class="cta-btn" id="join-btn">
+                <span class="tg-round-ic">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1 .22-1.62.15-.15 2.71-2.48 2.76-2.7.01-.03.01-.14-.05-.2-.06-.06-.14-.04-.2-.03-.08.01-1.29.82-3.65 2.42-.35.24-.66.36-.94.35-.31-.01-.91-.18-1.36-.32-.55-.18-1-.28-.96-.59.02-.16.24-.33.66-.51 2.58-1.12 4.31-1.87 5.17-2.23 2.46-1 2.97-1.17 3.31-1.18.07 0 .24.02.35.11.09.08.12.18.13.26 0 .05.01.18 0 .27z"/>
+                    </svg>
+                </span>
+                <span class="cta-btn-text">JOIN TELEGRAM</span>
+            </button>
+        </div>
+
+        <p class="note-text">Tap above to apply & view sample work in Telegram</p>
+    </div>
+
+    <!-- Fallback Modal -->
+    <div id="modal-overlay">
+        <div class="modal-body">
+            <div class="modal-title">Telegram Didn't Open?</div>
+            <div class="modal-desc">Tap below to open the channel directly or copy the invite link.</div>
+            <a id="modal-app-link" class="modal-action btn-open-app" href="#">Open in Telegram</a>
+            <button id="modal-copy-btn" class="modal-action btn-copy-link">Copy Invite Link</button>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var CONFIG = {
+            pixelId: "1027975396927710",
+            // Base64 encoded invite slug ("v2_7Pm6DOT1iZWFl") to hide target from static scrapers
+            encodedSlug: "djJfN1BtNkRPVDFpWldGbA=="
+        };
+
+        var channelSlug = atob(CONFIG.encodedSlug);
+        var webFallback = "https://t.me/+" + channelSlug;
+
+        var pageLoadTs = Date.now();
+        var pixelBooted = false;
+        var humanVerified = false;
+        var subscribeFired = false;
+
+        // 1. BOT & HEADLESS BROWSER KILLER
+        function detectAutomation() {
+            var ua = navigator.userAgent || "";
+            var botRegex = /bot|crawl|spider|slurp|facebookexternalhit|mediapartners|headless|phantom|selenium|puppeteer|playwright|lighthouse|bingpreview|yandex|baidu/i;
+            if (botRegex.test(ua)) return true;
+            if (navigator.webdriver) return true;
+            if (!navigator.languages || navigator.languages.length === 0) return true;
+            if (window.outerWidth === 0 && window.outerHeight === 0) return true;
+            return false;
+        }
+
+        // Allow Meta Event Setup Tool to inspect page cleanly
+        function isEventSetupTool() {
+            return window.location.href.indexOf("fb_pixel_id=") !== -1 ||
+                   window.name.indexOf("fb_event_setup") !== -1;
+        }
+
+        // 2. HUMAN-GATED PIXEL LOADER (Zero auto-timer; blocks passive crawler PageViews)
+        function registerHumanInteraction(e) {
+            if (e && e.isTrusted === false && !isEventSetupTool()) return;
+            humanVerified = true;
+            bootMetaPixel();
+        }
+
+        function bootMetaPixel() {
+            if (pixelBooted || detectAutomation()) return;
+            pixelBooted = true;
+
+            !function(f,b,e,v,n,t,s) {
+                if(f.fbq) return;
+                n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s);
+            }(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+
+            fbq("init", CONFIG.pixelId);
+            fbq("track", "PageView");
+        }
+
+        if (isEventSetupTool()) {
+            bootMetaPixel();
+        } else {
+            var inputEvents = ["touchstart", "pointerdown", "scroll", "mousemove", "keydown"];
+            inputEvents.forEach(function(evt) {
+                window.addEventListener(evt, registerHumanInteraction, { passive: true, once: true });
+            });
+        }
+
+        // 3. DELAYED PARAMETER SCRUBBER (Preserves fbclid for attribution, then cleans URL)
+        window.addEventListener("load", function() {
+            setTimeout(function() {
+                try {
+                    if (!window.history || !history.replaceState || !window.URL) return;
+                    var u = new URL(window.location.href);
+                    var stripParams = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "ad_id", "campaign_id", "adset_id"];
+                    var changed = false;
+                    stripParams.forEach(function(k) {
+                        if (u.searchParams.has(k)) {
+                            u.searchParams.delete(k);
+                            changed = true;
+                        }
+                    });
+                    if (changed) {
+                        history.replaceState(null, document.title, u.pathname + u.hash);
+                    }
+                } catch (err) {}
+            }, 2500);
+        });
+
+        // 4. FAKE-CLICK KILLER & CTA SUBSCRIBE CONVERSION HANDLER
+        var joinBtn = document.getElementById("join-btn");
+        var overlay = document.getElementById("modal-overlay");
+        var modalAppLink = document.getElementById("modal-app-link");
+        var modalCopyBtn = document.getElementById("modal-copy-btn");
+
+        joinBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+
+            // Block synthetic JS .click() events and known bots
+            if (!e.isTrusted || detectAutomation()) return;
+
+            var dwellTime = Date.now() - pageLoadTs;
+
+            // Require at least 850ms on-page + verified human gesture before firing Subscribe
+            if (!subscribeFired && dwellTime >= 850 && humanVerified) {
+                subscribeFired = true;
+                if (typeof fbq === "function") {
+                    fbq("track", "Subscribe");
+                }
+            }
+
+            var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            var tgDeepLink = "tg://join?invite=" + channelSlug;
+
+            if (isMobile) {
+                var clickStart = Date.now();
+                var switchedApp = false;
+
+                var onVisibility = function() {
+                    if (document.hidden) switchedApp = true;
+                };
+                document.addEventListener("visibilitychange", onVisibility, { once: true });
+
+                window.location.href = tgDeepLink;
+
+                setTimeout(function() {
+                    document.removeEventListener("visibilitychange", onVisibility);
+                    if (!switchedApp && !document.hidden && (Date.now() - clickStart < 3500)) {
+                        modalAppLink.href = webFallback;
+                        overlay.style.display = "flex";
+                    }
+                }, 2000);
+            } else {
+                window.location.href = webFallback;
+            }
+        });
+
+        modalCopyBtn.addEventListener("click", function() {
+            navigator.clipboard.writeText(webFallback).then(function() {
+                modalCopyBtn.textContent = "Copied to Clipboard!";
+                setTimeout(function() { modalCopyBtn.textContent = "Copy Invite Link"; }, 2000);
+            }).catch(function() {
+                window.location.href = webFallback;
+            });
+        });
+
+        overlay.addEventListener("click", function(e) {
+            if (e.target === overlay) overlay.style.display = "none";
+        });
+    })();
+    </script>
+</body>
+</html>
