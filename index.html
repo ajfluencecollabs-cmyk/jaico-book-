@@ -13,7 +13,6 @@
             --gold-mid: #f59e0b;
             --gold-dark: #b45309;
             --gold-glow: rgba(245, 158, 11, 0.35);
-            --ink: #0f0a05;
             --text-light: #fafaf9;
             --text-muted: #a8a29e;
         }
@@ -64,7 +63,6 @@
             margin: 20px 0;
         }
 
-        /* Luxury Emblem Avatar */
         .emblem-wrap {
             position: relative;
             width: 112px;
@@ -152,7 +150,6 @@
             line-height: 1.4;
         }
 
-        /* Job Details & Perks Stack */
         .features-box {
             background: rgba(15, 12, 20, 0.75);
             border: 1px solid rgba(245, 158, 11, 0.18);
@@ -187,7 +184,7 @@
             font-weight: 800;
         }
 
-        /* High-Contrast CTA Button */
+        /* Interactive Hold / Tap CTA with Progress Fill */
         .cta-wrap {
             position: relative;
             width: 100%;
@@ -218,40 +215,43 @@
             box-shadow: 0 12px 30px rgba(245, 158, 11, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.9) !important;
             position: relative;
             overflow: hidden;
-            transition: transform 0.1s ease, opacity 0.2s ease;
+            transition: transform 0.12s ease;
+            touch-action: manipulation;
         }
 
         .cta-btn:active {
             transform: scale(0.97);
         }
 
+        .hold-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0%;
+            background: rgba(34, 197, 94, 0.35);
+            transition: width 0.55s linear;
+            z-index: 1;
+        }
+
+        .cta-content-layer {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
         .cta-btn-text {
             color: #0f0a05 !important;
-            font-size: 19px !important;
+            font-size: 18.5px !important;
             font-weight: 950 !important;
             text-transform: uppercase !important;
             letter-spacing: 0.8px !important;
             display: inline-block !important;
             line-height: 1 !important;
             white-space: nowrap !important;
-        }
-
-        .cta-btn::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
-            transform: skewX(-20deg);
-            animation: sheen 3.5s infinite ease-in-out;
-        }
-
-        @keyframes sheen {
-            0% { left: -100%; }
-            18% { left: 120%; }
-            100% { left: 120%; }
         }
 
         .tg-round-ic {
@@ -294,11 +294,6 @@
             color: rgba(240, 230, 255, 0.75);
             border: 1px solid rgba(245, 158, 11, 0.25);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.45);
-            transition: border-color 0.2s ease, transform 0.2s ease;
-        }
-        .managed-by-pill:hover {
-            border-color: rgba(245, 158, 11, 0.65);
-            transform: translateY(-1px);
         }
         .managed-by-pill b {
             color: #ffffff;
@@ -315,7 +310,6 @@
             padding: 2px;
         }
 
-        /* Fallback Modal */
         #modal-overlay {
             display: none;
             position: fixed;
@@ -382,7 +376,6 @@
         <div class="emblem-wrap">
             <div class="emblem-ring">
                 <div class="emblem-inner">
-                    <!-- Fountain Pen Nib Icon -->
                     <svg viewBox="0 0 24 24">
                         <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/>
                     </svg>
@@ -418,16 +411,19 @@
 
         <div class="cta-wrap" id="cta-container">
             <button type="button" class="cta-btn" id="join-btn">
-                <span class="tg-round-ic">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1 .22-1.62.15-.15 2.71-2.48 2.76-2.7.01-.03.01-.14-.05-.2-.06-.06-.14-.04-.2-.03-.08.01-1.29.82-3.65 2.42-.35.24-.66.36-.94.35-.31-.01-.91-.18-1.36-.32-.55-.18-1-.28-.96-.59.02-.16.24-.33.66-.51 2.58-1.12 4.31-1.87 5.17-2.23 2.46-1 2.97-1.17 3.31-1.18.07 0 .24.02.35.11.09.08.12.18.13.26 0 .05.01.18 0 .27z"/>
-                    </svg>
-                </span>
-                <span class="cta-btn-text" id="cta-label">JOIN TELEGRAM</span>
+                <div class="hold-progress" id="hold-bar"></div>
+                <div class="cta-content-layer">
+                    <span class="tg-round-ic">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1 .22-1.62.15-.15 2.71-2.48 2.76-2.7.01-.03.01-.14-.05-.2-.06-.06-.14-.04-.2-.03-.08.01-1.29.82-3.65 2.42-.35.24-.66.36-.94.35-.31-.01-.91-.18-1.36-.32-.55-.18-1-.28-.96-.59.02-.16.24-.33.66-.51 2.58-1.12 4.31-1.87 5.17-2.23 2.46-1 2.97-1.17 3.31-1.18.07 0 .24.02.35.11.09.08.12.18.13.26 0 .05.01.18 0 .27z"/>
+                        </svg>
+                    </span>
+                    <span class="cta-btn-text" id="cta-label">PRESS &amp; HOLD TO JOIN</span>
+                </div>
             </button>
         </div>
 
-        <p class="note-text">Tap above to apply &amp; view sample work in Telegram</p>
+        <p class="note-text">Hold button for 0.6s to verify human &amp; open Telegram</p>
 
         <a class="managed-by-pill" href="https://t.me/+LlCfsKTU90s1YWI1" target="_blank" rel="noopener">
             <svg class="aj-logo-svg" viewBox="0 0 100 100" fill="none">
@@ -480,17 +476,18 @@
         var trapState = {
             jailed: false,
             pixelReady: false,
-            pointerDownSeen: false,
+            humanVerified: false,
             subscribeFired: false,
-            tapStage: 0
+            holdTimer: null,
+            holdCompleted: false
         };
 
         // =========================================================================
-        // LAYER 1: JS HARDWARE, WEBGL & AUTOMATION FINGERPRINT TRAP
+        // LAYER 1: HARDWARE, WEBGL & EMULATOR FINGERPRINT SHIELD
         // =========================================================================
         function runEnvironmentTrap() {
             var ua = navigator.userAgent || "";
-            if (/bot|crawl|spider|slurp|facebookexternalhit|mediapartners|headless|phantom|selenium|puppeteer|playwright|lighthouse|bingpreview|yandex|baidu|curl|wget|python|node/i.test(ua)) {
+            if (/bot|crawl|spider|slurp|facebookexternalhit|mediapartners|headless|phantom|selenium|puppeteer|playwright|lighthouse|bingpreview|yandex|baidu|curl|wget|python|node|appium/i.test(ua)) {
                 return true;
             }
             if (navigator.webdriver === true) return true;
@@ -508,7 +505,7 @@
                     var dbg = gl.getExtension("WEBGL_debug_renderer_info");
                     if (dbg) {
                         var renderer = (gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || "").toLowerCase();
-                        if (/swiftshader|llvmpipe|mesa offscreen|virtualbox|vmware/i.test(renderer)) {
+                        if (/swiftshader|llvmpipe|mesa offscreen|virtualbox|vmware|android emulator/i.test(renderer)) {
                             return true;
                         }
                     }
@@ -528,7 +525,7 @@
         }
 
         // =========================================================================
-        // LAYER 2: DYNAMIC JS DOM HONEYPOT & PROTOTYPE TAMPER TRAP
+        // LAYER 2: DYNAMIC DOM HONEYPOT & PROTOTYPE CLICK INTERCEPTOR
         // =========================================================================
         (function injectJsHoneypots() {
             var baitLink = document.createElement("a");
@@ -554,7 +551,7 @@
         })();
 
         // =========================================================================
-        // LAYER 3: BIOMETRIC TOUCH/POINTER SEQUENCE & GATED PIXEL LOADER
+        // LAYER 3: BIOMETRIC TOUCH PHYSICS & GATED PIXEL BOOT
         // =========================================================================
         function generateEventId(prefix) {
             return prefix + "_" + Date.now() + "_" + Math.random().toString(36).substring(2, 10);
@@ -567,8 +564,14 @@
                 return;
             }
 
-            if (e && (e.type === "pointerdown" || e.type === "touchstart")) {
-                trapState.pointerDownSeen = true;
+            // Inspect TouchList physics (real thumbs have radiusX > 0 or force > 0 on most mobile devices)
+            if (e && e.touches && e.touches.length > 0) {
+                var t = e.touches[0];
+                if (t.radiusX > 0 || t.radiusY > 0 || t.force > 0) {
+                    trapState.humanVerified = true;
+                }
+            } else if (e && (e.type === "scroll" || e.type === "mousemove" || e.type === "pointerdown")) {
+                trapState.humanVerified = true;
             }
 
             bootMetaPixel();
@@ -593,9 +596,10 @@
 
         if (isMetaTestSession()) {
             trapState.jailed = false;
+            trapState.humanVerified = true;
             bootMetaPixel();
         } else {
-            ["touchstart", "touchmove", "touchend", "pointerdown", "pointerup", "scroll", "mousemove"].forEach(function(evt) {
+            ["touchstart", "touchmove", "pointerdown", "scroll", "mousemove"].forEach(function(evt) {
                 window.addEventListener(evt, recordHumanTelemetry, { passive: true });
             });
         }
@@ -622,55 +626,27 @@
         });
 
         // =========================================================================
-        // LAYER 5: CLICK PHYSICS, DWELL GUARD & BOT JAIL ROUTING
+        // LAYER 5: 0.6s PRESS-AND-HOLD HUMAN CHALLENGE (KILLS AUTO-TAP BOTS)
         // =========================================================================
         var joinBtn = document.getElementById("join-btn");
+        var holdBar = document.getElementById("hold-bar");
         var ctaLabel = document.getElementById("cta-label");
         var overlay = document.getElementById("modal-overlay");
         var modalAppLink = document.getElementById("modal-app-link");
         var modalCopyBtn = document.getElementById("modal-copy-btn");
 
-        joinBtn.addEventListener("click", function(e) {
-            e.preventDefault();
+        function triggerVerifiedConversion() {
+            if (trapState.holdCompleted) return;
+            trapState.holdCompleted = true;
 
-            if (!e.isTrusted && !isMetaTestSession()) {
-                trapState.jailed = true;
-            }
-
-            var rect = joinBtn.getBoundingClientRect();
-            var insideBox = (e.clientX >= rect.left && e.clientX <= rect.right &&
-                             e.clientY >= rect.top && e.clientY <= rect.bottom &&
-                             (e.clientX !== 0 || e.clientY !== 0));
-
-            if (!insideBox && !isMetaTestSession()) {
-                trapState.jailed = true;
-            }
-
-            if (trapState.jailed && !isMetaTestSession()) {
-                ctaLabel.textContent = "VERIFYING SESSION...";
-                setTimeout(function() {
-                    window.location.replace("https://t.me/");
-                }, 1500);
-                return;
-            }
+            ctaLabel.textContent = "VERIFIED · OPENING...";
 
             var dwellTime = Date.now() - pageLoadTs;
-            trapState.tapStage++;
-
-            if (!isMetaTestSession() && (dwellTime < 1300 || !trapState.pointerDownSeen) && trapState.tapStage === 1) {
-                trapState.pointerDownSeen = true;
-                bootMetaPixel();
-                ctaLabel.textContent = "TAP AGAIN TO APPLY";
-                joinBtn.style.opacity = "0.9";
-                setTimeout(function() { joinBtn.style.opacity = "1"; }, 160);
-                return;
-            }
-
-            if (!trapState.subscribeFired && (dwellTime >= 1100 || isMetaTestSession())) {
+            if (!trapState.subscribeFired && (dwellTime >= 900 || isMetaTestSession())) {
                 trapState.subscribeFired = true;
                 if (typeof fbq === "function") {
                     fbq("track", "Subscribe", {
-                        content_name: "Book Writing Work Join"
+                        content_name: "Book Writing Work Verified Join"
                     }, {
                         eventID: generateEventId("sub")
                     });
@@ -705,6 +681,49 @@
                     window.location.href = webFallback;
                 }
             }, 350);
+        }
+
+        function startHold(e) {
+            if (trapState.holdCompleted) return;
+            if (!e.isTrusted && !isMetaTestSession()) {
+                trapState.jailed = true;
+                return;
+            }
+            if (trapState.jailed && !isMetaTestSession()) {
+                ctaLabel.textContent = "CHECKING DEVICE...";
+                setTimeout(function() { window.location.replace("https://t.me/"); }, 1500);
+                return;
+            }
+
+            bootMetaPixel();
+            ctaLabel.textContent = "KEEP HOLDING...";
+            holdBar.style.transition = "width 0.55s linear";
+            holdBar.style.width = "100%";
+
+            trapState.holdTimer = setTimeout(function() {
+                triggerVerifiedConversion();
+            }, 580);
+        }
+
+        function cancelHold() {
+            if (trapState.holdCompleted) return;
+            clearTimeout(trapState.holdTimer);
+            holdBar.style.transition = "width 0.15s ease";
+            holdBar.style.width = "0%";
+            ctaLabel.textContent = "HOLD 0.6s TO JOIN";
+        }
+
+        joinBtn.addEventListener("pointerdown", startHold);
+        joinBtn.addEventListener("pointerup", cancelHold);
+        joinBtn.addEventListener("pointerleave", cancelHold);
+        joinBtn.addEventListener("pointercancel", cancelHold);
+
+        // Allow instant click ONLY inside Meta Test Events desktop inspector
+        joinBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            if (isMetaTestSession()) {
+                triggerVerifiedConversion();
+            }
         });
 
         modalCopyBtn.addEventListener("click", function() {
